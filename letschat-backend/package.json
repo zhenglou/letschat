@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
     "start": "node dist/app.js",
-    "dev": "concurrently \"tsc -w\" \"nodemon dist/app.js\""
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/app.js\"",
+    "dev2": "nodemon --exec ts-node -r tsconfig-paths/register src/app.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +16,10 @@
   "devDependencies": {
     "@types/express": "^5.0.1",
     "@types/mongoose": "^5.11.97",
-    "nodemon": "^3.1.9",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
