@@ -5,6 +5,7 @@ export type Result = {
   code: number
   data: any,
   pagination?: Pagination;
+  total?:number
 }
 export interface Pagination {
   currentPage: number;

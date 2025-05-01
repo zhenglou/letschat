@@ -19,7 +19,7 @@ type State = {
 const SearchUser = () => {
   const [query, setQuery] = useState<Query>({
     pageNo: 1,
-    pageSize: 20,
+    pageSize: 16,
     username: '',
   })
   const [state, setState] = useState<State>({
@@ -36,7 +36,8 @@ const SearchUser = () => {
 
     if (res.data[0] && res.code == 200) {
       setState({
-        total: res.data.length,
+        // total: 50,
+        total: res.total || 16,
         users: res.data
       })
     }

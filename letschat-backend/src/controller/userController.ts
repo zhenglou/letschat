@@ -13,7 +13,8 @@ export const getAllUsers = async (req: Request, res: Response) => {
     }
     5
     if (pageInfo) {
-      res.status(200).json(ResponseHelper.success(await listByPage(pageInfo), pageInfo));
+      const {total,usersBypage} = await listByPage(pageInfo);
+      res.status(200).json(ResponseHelper.success(usersBypage, pageInfo,total));
       return;
     }
     res.status(200).json(ResponseHelper.success(await list()));

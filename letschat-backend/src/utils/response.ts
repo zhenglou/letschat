@@ -5,12 +5,13 @@ export class ResponseHelper {
    * @param data 响应数据
    * @param pagination 分页信息
    */
-  static success<T>(data: T | null = null, pagination?: Pagination): SuccessResponse<T> {
+  static success<T>(data: T | null = null, pagination?: Pagination, total?: number): SuccessResponse<T> {
     return {
       code: 200,
       message: 'success',
       data,
       ...(pagination && { pagination }),
+      total
     };
   }
 

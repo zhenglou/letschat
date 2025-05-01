@@ -4,6 +4,7 @@ export type SuccessResponse<T = any> = {
   message: string;
   data: T | null;
   pagination?: Pagination; // 分页信息（可选）
+  total?:number;
 };
 
 // 分页类型

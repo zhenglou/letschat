@@ -8,8 +8,13 @@ export const list = () => {
 export const listOne = (key: number, user: userType) => {
   return findOne(key, user);
 }
-export const listByPage = (pageInfo:Pagination) => {
-  return findByPage(pageInfo);
+export const listByPage = async (pageInfo:Pagination) => {
+  const users = await find();
+  const usersBypage = await findByPage(pageInfo);
+  return {
+    total:users.length,
+    usersBypage
+  }
 }
 
 export const general = (user: userType) => {
