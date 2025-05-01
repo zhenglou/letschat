@@ -1,4 +1,4 @@
-import { createUser } from "@/models/user"
-export const listUsers = ()=>{
-  return createUser();
-}
+// import { createUser } from "@/models/user"
+// export const listUsers = ()=>{
+//   return createUser();
+// }

@@ -1,4 +1,4 @@
-// import { Group } from "@/stores/group"
+import { Group } from "@/stores/group"
 
 
 // Types for user
@@ -14,6 +14,12 @@ export type UserSummary = {
     id: number
     avatar: string
     username: string
+    email: string
+}
+export type UserSummary2 = {
+    _id: number
+    avatar: string
+    name: string
     email: string
 }
 
@@ -56,7 +62,7 @@ export type SingleChat = {
 export type GroupChat = {
     type: ChatType.Group
     id: string
-    // group: Group
+    group: Group
     history: Array<Message>
 }
 

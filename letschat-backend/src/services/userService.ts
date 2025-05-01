@@ -1,17 +1,25 @@
-import { create,find,findOne } from "@/models/userModel"
-import { userType } from '@/types/user' 
-export const list = ()=>{
+import { create, find, findOne, deleteOne, update, findByPage } from "@/models/userModel"
+import { userType } from '@/types/user'
+import { Pagination } from '@/types/response';
+export const list = () => {
   return find();
 }
-export const listOne = ()=>{
-  return findOne();
+
+export const listOne = (key: number, user: userType) => {
+  return findOne(key, user);
 }
-export const general = (user:userType)=>{
+export const listByPage = (pageInfo:Pagination) => {
+  return findByPage(pageInfo);
+}
+
+export const general = (user: userType) => {
   return create(user);
 }
-export const modify = ()=>{
-  return find();
+
+export const modify = (user: userType) => {
+  return update(user);
 }
-export const deleteOne = ()=>{
-  return find();
+
+export const deleteUser = (user: userType) => {
+  return deleteOne(user);
 }

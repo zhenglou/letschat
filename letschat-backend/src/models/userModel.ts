@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { ResponseHelper } from '@/utils/response';
 import { userType } from '@/types/user'
-
+import { Pagination } from '@/types/response';
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -25,48 +25,79 @@ const User = mongoose.model('user', userSchema);
 
 // 创建初始用户
 export async function create(user: userType) {
-  try{
+  try {
     new User(user).save();
     return 1;
-  }catch(error:any){
+  } catch (error: any) {
     throw error
   }
- 
+
 }
 // 查找用户示例
 export async function find() {
-  const user = await User.find();
-  if (user) {
-    return ResponseHelper.success(user)
-  } else {
-    return ResponseHelper.error(0, "not find")
+  try {
+    return User.find();
+  } catch (error: any) {
+    return error;
   }
 }
-// 查找用户示例
-export async function findOne() {
-  const user = await User.find();
-  if (user) {
-    console.log('找到用户:', user);
-  } else {
-    console.log('未找到用户');
+// 分页查询
+export async function findByPage(pageInfo:Pagination) {
+  try {
+    return User.find().skip((pageInfo.currentPage-1) * pageInfo.pageSize).limit(pageInfo.pageSize);
+  } catch (error: any) {
+    return error;
   }
 }
-// // 修改用户示例
-//export  async function update(name, newData) {
-//   const user = await User.findOneAndUpdate({ name: name }, newData, { new: true });
-//   if (user) {
-//     console.log('用户已更新:', user);
-//   } else {
-//     console.log('未找到用户以更新');
-//   }
-// }
-// // 删除用户示例
-//export  async function delete(name) {
-//   const result = await User.deleteOne({ name: name });
-//   if (result.deletedCount > 0) {
-//     console.log('用户已删除');
-//   } else {
-//     console.log('未找到用户以删除');
-//   }
-// }
+// 查找单个用户
+export async function findOne(key: number, user: userType) {
+  // console.log(user);
+  try {
+    if (key === 0) {
+      // 通过id查询
+      return User.findById(user.id);
+    } else if (key === 1) {
+      // 通过name查询
+      return User.findOne({ name: user.name });
+    }
+    return null;
+  } catch (error: any) {
+    throw error;
+  }
+}
+// 修改用户示例
+export async function update(user: userType) {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      user.id,
+      {
+        name: user.name,
+        password: user.password
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (updatedUser) {
+      return 1;
+    } else {
+      return 0;
+    }
+  } catch (error: any) {
+    throw error;
+  }
+}
+// 删除用户示例
+export async function deleteOne(user: userType) {
+
+  try {
+    const result = await User.deleteOne({ _id: user.id });
+    if (result.deletedCount > 0) {
+      return 1;
+    } else {
+      return 0;
+    }
+  } catch (error: any) {
+    return error;
+  }
+}
 

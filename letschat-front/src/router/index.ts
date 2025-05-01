@@ -6,6 +6,8 @@ import Home from "@/layouts/Home";
 import Login from "@/layouts/Login";
 import Friends from "@/pages/Friends";
 import Messages from "@/pages/Messages";
+import SearchUser from "@/pages/search-user";
+import Groups from "@/pages/groups";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,14 @@ const router = createBrowserRouter([
             path:'messages',
             Component:Messages
           },
+          {
+            path:'search-user',
+            Component:SearchUser
+          },
+          {
+            path:'groups',
+            Component:Groups
+          }
         ]
       },
       {

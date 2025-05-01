@@ -1,7 +1,10 @@
 import express, { Application } from 'express';
 import routes from '@/routes';
 import { connectDB } from "./mongodb"
+import cors from 'cors';
 const app: Application = express();
+// 允许所有源
+app.use(cors());
 connectDB();
 // 中间件
 app.use(express.json());

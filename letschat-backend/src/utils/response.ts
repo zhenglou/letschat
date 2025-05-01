@@ -1,5 +1,4 @@
 import { SuccessResponse, ErrorResponse, Pagination } from '@/types/response';
-
 export class ResponseHelper {
   /**
    * 成功响应

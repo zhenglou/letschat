@@ -10,7 +10,7 @@ export type SuccessResponse<T = any> = {
 export interface Pagination {
   currentPage: number;
   pageSize: number;
-  total: number;
+  total?: number;
 }
 
 // 错误响应类型
