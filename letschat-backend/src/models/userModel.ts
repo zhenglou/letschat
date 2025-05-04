@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { ResponseHelper } from '@/utils/response';
 import { userType } from '@/types/user'
 import { Pagination } from '@/types/response';
+import { Friendship } from './friendshipsModel';
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -20,18 +21,30 @@ const userSchema = new mongoose.Schema({
     select: false // 默认查询时不返回密码字段
   }
 }, { timestamps: true, strict: true });
-
+// userSchema.pre('deleteOne', { document: true, query: false }, async function(next) {
+//   const parentId = this._id;
+//   await Friendship.deleteMany({ parent: parentId });
+//   next();
+// });
 const User = mongoose.model('user', userSchema);
 
 // 创建初始用户
 export async function create(user: userType) {
   try {
-    new User(user).save();
+    await User.create(user);
     return 1;
   } catch (error: any) {
     throw error
   }
-
+}
+// 登录
+export async function findByNameAndPWd(user: userType) {
+  try {
+    const userInfo = await User.find({ name: user.name, password: user.password });
+    return userInfo;
+  } catch (error: any) {
+    throw error
+  }
 }
 // 查找用户示例
 export async function find() {
@@ -42,9 +55,9 @@ export async function find() {
   }
 }
 // 分页查询
-export async function findByPage(pageInfo:Pagination) {
+export async function findByPage(pageInfo: Pagination) {
   try {
-    return User.find().skip((pageInfo.currentPage-1) * pageInfo.pageSize).limit(pageInfo.pageSize);
+    return User.find().skip((pageInfo.currentPage - 1) * pageInfo.pageSize).limit(pageInfo.pageSize);
   } catch (error: any) {
     return error;
   }

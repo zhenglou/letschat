@@ -2,15 +2,11 @@
 import Avatar from '@/components/Avatar'
 import Menu from '@/components/Menu'
 import ModeToggle from '@/components/ModeToggle'
-// import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/user'
 import { Link } from 'react-router'
 
 const NavBar = () => {
-    const user = {
-      username:'zhenglou',
-      email:'1299302045@qq.com'
-    }
-
+    const userStore = useUserStore();
     return (
         <div className="w-52 h-full flex flex-col justify-between flex-shrink-0">
             <div className="flex items-center gap-2 py-4 px-5">
@@ -26,10 +22,10 @@ const NavBar = () => {
             {/* info */}
             <Link to='/' className="border-t p-5 flex gap-2 items-center cursor-pointer relative">
         
-                <Avatar name={user?.username} className='flex-shrink-0'/>
+                <Avatar name={userStore.user?.userInfo.name} className='flex-shrink-0'/>
                 <div className='relative overflow-hidden'>
-                    <div className="text-base font-bold text-ellipsis overflow-hidden">{ user?.username }</div>
-                    <div className="text-sm text-gray-500 text-ellipsis overflow-hidden">{ user?.email }</div>
+                    <div className="text-base font-bold text-ellipsis overflow-hidden">{ userStore.user?.userInfo.name }</div>
+                    {/* <div className="text-sm text-gray-500 text-ellipsis overflow-hidden">{ user?.email }</div> */}
                 </div>
             </Link>
         </div>

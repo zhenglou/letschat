@@ -5,7 +5,7 @@ import "@/styles/globals.css"
 import {
   RouterProvider,
 } from "react-router";
-
+import { Toaster } from 'react-hot-toast'
 import router from "@/router/index"
 // const root = createRoot(document.getElementById('root')!);
 // root.render(
@@ -14,7 +14,10 @@ import router from "@/router/index"
 //   </StrictMode>
 // );
 createRoot(document.getElementById('root')!).render(
-  <RouterProvider router={router} />
+  <>
+    <RouterProvider router={router} />
+    <Toaster></Toaster>
+  </>
   // <StrictMode>
   //   <App />
   // </StrictMode>

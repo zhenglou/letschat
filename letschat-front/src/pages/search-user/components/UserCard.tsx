@@ -2,12 +2,11 @@ import Avatar from '@/components/Avatar'
 import { useUserStore } from '@/stores/user'
 import { UserSummary2 } from '@/types'
 import { toLogin } from '@/utils/fake'
-import request,{type Result} from '@/utils/request'
 import { motion } from 'framer-motion'
 import { LogIn, UserPlus } from 'lucide-react'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
-
+import { getUserList } from '@/apis/users'
 const BaseUrl = ""
 
 type Props = {
@@ -23,13 +22,7 @@ const UserCard = ({user}:Props) => {
     
 
     const toAddFriend = async (user:UserSummary2) => {
-        const res:Result = await request({
-            url: `/users/getUserByNameOrId`,  
-            method: 'GET',
-            params:{
-                id:user._id
-            }
-        })
+        const res = await getUserList(user)
         if (res.code == 200) {
             toast.success(`Friend request has been sent to: ${user.name}`)
         }
@@ -44,10 +37,10 @@ const UserCard = ({user}:Props) => {
         onMouseEnter={() => setTop(0)}
         onMouseLeave={() => setTop('100%')}
     >
-        <Avatar name={user.name} avatar={user.avatar} className='flex-shrink-0'/>
+        <Avatar name={user.name} className='flex-shrink-0'/>
         <div className='overflow-hidden'>
             <div className='font-bold text-xl text-ellipsis overflow-hidden'>{ user.name }</div>
-            <div className='text-ellipsis overflow-hidden'>{ user.email }</div>
+            {/* <div className='text-ellipsis overflow-hidden'>age { user.age }</div> */}
         </div>
         <motion.div 
             className='absolute bg-white w-full h-full flex justify-center items-center bg-opacity-95 gap-10'

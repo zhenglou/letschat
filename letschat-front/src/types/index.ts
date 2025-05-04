@@ -9,6 +9,19 @@ export type User = {
     token: string
     email: string
 }
+export type User2 = {
+    id: number
+    name: string
+    token: string
+}
+export type User3 = {
+    token: string,
+    userInfo: {
+        name: string,
+        age:number,
+        _id:string
+    }
+}
 
 export type UserSummary = {
     id: number
@@ -17,10 +30,10 @@ export type UserSummary = {
     email: string
 }
 export type UserSummary2 = {
-    _id: number
-    avatar: string
+    _id: string
     name: string
-    email: string
+    age:number
+    
 }
 
 // Types for message
@@ -30,9 +43,9 @@ export enum MessageType {
 }
 
 export enum ContentType {
-	Text   = "text",
-	Emoji  = "emoji",
-	Image  = "image"
+    Text = "text",
+    Emoji = "emoji",
+    Image = "image"
 }
 
 
@@ -76,7 +89,7 @@ export type Message = {
 
     chatType: ChatType
     chatId: string
-    
+
     contentType: ContentType
     content: string
 

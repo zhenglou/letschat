@@ -3,14 +3,15 @@ import { useEffect, useState } from 'react'
 import Empty from '@/components/Empty'
 import SearchBar from '@/components/SearchBar'
 import UserCard from './components/UserCard'
-import { UserSummary2 } from '@/types'
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon, UserRoundXIcon } from 'lucide-react'
-import request, { type Result } from '@/utils/request'
-const BASE = "http://localhost:3000";
+import { getUserList } from '@/apis/users'
+import { User3, UserSummary2 } from '@/types'
+import { useUserStore } from '@/stores/user'
+import toast from 'react-hot-toast'
 type Query = {
   pageNo: number
   pageSize: number
-  username: string
+  name: string
 }
 type State = {
   total: number
@@ -20,27 +21,30 @@ const SearchUser = () => {
   const [query, setQuery] = useState<Query>({
     pageNo: 1,
     pageSize: 16,
-    username: '',
+    name: '',
   })
   const [state, setState] = useState<State>({
     total: 0,
     users: []
   })
+  const user = useUserStore().user!;
   const getUsers = async (query: Query) => {
-    const res: Result = await request({
-      url: '/users',
-      method: 'GET',
-      params:query
-    })
-    console.log(res);
-
-    if (res.data[0] && res.code == 200) {
-      setState({
-        // total: 50,
-        total: res.total || 16,
-        users: res.data
-      })
+    try {
+      let resRaw = await getUserList(query);
+      resRaw.total = resRaw.total - 1
+      if (resRaw.data[0] && resRaw.code == 200) {
+        const res = resRaw.data.filter((item: UserSummary2) => {
+          return user.userInfo._id != item._id;
+        })
+        setState({
+          total: resRaw.total || 16,
+          users: res
+        })
+      }
+    } catch (error) {
+      toast.error("token过期或不存在，请重新登录")
     }
+
   }
   useEffect(() => {
     getUsers(query)
@@ -61,7 +65,7 @@ const SearchUser = () => {
           </div>
           Search User
         </div>
-        <SearchBar className='w-80' placeholder='Search by usename' onChange={evt => setQuery(query => ({ ...query, username: evt.target.value }))} />
+        <SearchBar className='w-80' placeholder='Search by usename' onChange={evt => setQuery(query => ({ ...query, name: evt.target.value }))} />
       </div>
       {
         state.users.length ?

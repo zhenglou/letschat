@@ -1,11 +1,12 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
+import { userStorage } from './storage'
 export type Result = {
   // success: boolean
   message: string
   code: number
   data: any,
   pagination?: Pagination;
-  total?:number
+  total:number
 }
 export interface Pagination {
   currentPage: number;
@@ -13,7 +14,7 @@ export interface Pagination {
   total: number;
 }
 
-const request = axios.create({
+const instance = axios.create({
   baseURL: "http://localhost:3000",
   timeout: 10000,
   headers: {
@@ -22,9 +23,18 @@ const request = axios.create({
 })
 
 // 请求拦截器
-request.interceptors.request.use(
+instance.interceptors.request.use(
   (config) => {
-
+    // 自动加token
+    try {
+      const user = userStorage.get();
+      if (user && user.token) {
+        config.headers = config.headers || {};
+        config.headers['Authorization'] = `Bearer ${user.token}`;
+      }
+    } catch (e) {
+      // 忽略token注入错误
+    }
     return config
   },
   (error) => {
@@ -33,7 +43,7 @@ request.interceptors.request.use(
 )
 
 // 响应拦截器
-request.interceptors.response.use(
+instance.interceptors.response.use(
   (response) => {
     // console.log(response,111);
     
@@ -64,5 +74,10 @@ request.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+// 泛型封装
+function request<T = any>(config: AxiosRequestConfig): Promise<T> {
+  return instance(config) as Promise<T>;
+}
 
 export default request

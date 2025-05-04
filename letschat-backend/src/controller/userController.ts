@@ -1,20 +1,22 @@
 import { Request, Response } from 'express';
-import { list, general, listOne, deleteUser, modify, listByPage } from "@/services/userService"
+import { list, general, listOne, deleteUser, modify, listByPage, userLoginService } from "@/services/userService"
 import { ResponseHelper } from "@/utils/response"
 import { userType } from '@/types/user'
 import { Pagination } from '@/types/response';
+import { signToken, verifyToken } from '@/utils/Jwt';
 export const getAllUsers = async (req: Request, res: Response) => {
-  const name = typeof req.query.username === 'string' ? req.query.username : '';
+  const name = typeof req.query.name === 'string' ? req.query.name : '';
   const pageInfo: Pagination = { currentPage: Number(req.query.pageNo), pageSize: Number(req.query.pageSize) }
+
   try {
     if (name) {
-      res.status(200).json(ResponseHelper.success([await listOne(1, { id: "", name, password: "" })]));
+
+      res.status(200).json(ResponseHelper.success([await listOne(1, { name, password: "" })]));
       return;
     }
-    5
     if (pageInfo) {
-      const {total,usersBypage} = await listByPage(pageInfo);
-      res.status(200).json(ResponseHelper.success(usersBypage, pageInfo,total));
+      const { total, usersBypage } = await listByPage(pageInfo);
+      res.status(200).json(ResponseHelper.success(usersBypage, pageInfo, total));
       return;
     }
     res.status(200).json(ResponseHelper.success(await list()));
@@ -30,12 +32,18 @@ export const getUserByNameOrId = async (req: Request, res: Response) => {
     // console.log(req.query);
     // console.log(req.params);
 
+    const userObj: userType = {
+      id: typeof user.id === 'string' ? user.id : '',
+      name: typeof user.name === 'string' ? user.name : '',
+      password: '' // 这里没有密码参数就设为空
+    };
+
     if (user.id) {
       // 通过ID查询
-      res.status(200).json(ResponseHelper.success(await listOne(0, user as userType)));
+      res.status(200).json(ResponseHelper.success(await listOne(0, userObj)));
     } else if (user.name) {
       // 通过name查询
-      res.status(200).json(ResponseHelper.success(await listOne(1, user as userType)));
+      res.status(200).json(ResponseHelper.success(await listOne(1, userObj)));
     } else {
       res.status(400).json(ResponseHelper.error(400, '请提供id或name参数'));
     }
@@ -55,7 +63,12 @@ export const createUser = async (req: Request, res: Response) => {
 export const deleteUserOne = async (req: Request, res: Response) => {
   try {
     const user = req.params;
-    res.status(200).json(ResponseHelper.success(await deleteUser(user as userType)));
+    const userObj: userType = {
+      id: typeof user.id === 'string' ? user.id : '',
+      name: typeof user.name === 'string' ? user.name : '',
+      password: '' // 这里没有密码参数就设为空
+    };
+    res.status(200).json(ResponseHelper.success(await deleteUser(userObj)));
   } catch (error: any) {
     res.status(400).json(ResponseHelper.error(400, error))
   }
@@ -66,7 +79,6 @@ export const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
     const updateData = req.body;
-    console.log(updateData, "2");
 
     // 组合用户数据
     const userData: userType = {
@@ -74,7 +86,6 @@ export const updateUser = async (req: Request, res: Response) => {
       name: updateData.name,
       password: updateData.password
     };
-    console.log(userData, "1");
 
     const result = await modify(userData);
 
@@ -86,4 +97,20 @@ export const updateUser = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(400).json(ResponseHelper.error(400, error.message));
   }
+};
+export const userLogin = async (req: Request, res: Response) => {
+
+  // const token = signToken({ id: "2", name: "zhenglou" })
+  // const k = verifyToken(token);
+  // console.log(k);
+  try {
+    res.status(200).json(ResponseHelper.success(
+      await userLoginService(req.body)
+    ))
+  } catch (error: any) {
+    res.status(400).json(ResponseHelper.error(
+      400, error
+    ))
+  }
+
 }; 

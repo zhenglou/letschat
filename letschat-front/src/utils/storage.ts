@@ -1,4 +1,4 @@
-import { Chat, User } from "@/types";
+import { Chat, User, User3 } from "@/types";
 
 // type UserStore = {
 //     set: (user:User) => void
@@ -10,7 +10,7 @@ const STORAGE = sessionStorage
 const MAX = 100
 
 export const userStorage = {
-    set: (user:User) => {
+    set: (user: User3) => {
         STORAGE.setItem('user', JSON.stringify(user))
     },
     delete: () => {
@@ -18,9 +18,9 @@ export const userStorage = {
     },
     get: () => {
         const userString = STORAGE.getItem('user')
-    
+
         if (userString === null) return null
-    
+
         return JSON.parse(userString)
     }
 }

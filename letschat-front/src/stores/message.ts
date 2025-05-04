@@ -66,7 +66,7 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
         if (msg.chatType === ChatType.Single) {
             await useFriendStore.getState().getList()
             let owner: UserSummary | undefined
-            const user = useUserStore.getState().user
+            const user:any = useUserStore.getState().user
             const users = useFriendStore.getState().list.slice()
 
             if (user) {

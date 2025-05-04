@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import userRoutes from '@/routes/userRouter';
+import friendshipsRoutes from '@/routes/friendshipsRouter';
 // 引入其他路由模块
 
 const router = Router();
 
 // 注册各模块路由
 router.use('/users', userRoutes);
+router.use('/friendships', friendshipsRoutes);
 // 注册其他模块路由
 
 
