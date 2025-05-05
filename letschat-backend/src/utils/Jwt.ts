@@ -5,6 +5,7 @@ const SECRET_KEY = process.env.JWT_SECRET || '2H46LGSdgMeULDmAhGbq5aoxBGcwTICq';
 const EXPIRES_IN: number | StringValue = '7d'; // 默认7天
 
 export interface TokenPayload {
+  id: string;
   name: string | null;
   [key: string]: any;
 }

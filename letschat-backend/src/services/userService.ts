@@ -38,7 +38,7 @@ export const deleteUser = (user: userType) => {
 export const userLoginService = async (user: userType) => {
   const userInfo = await findByNameAndPWd(user);
   if (userInfo.length != 0) {
-    const token = signToken({ name: user.name });
+    const token = signToken({ name: user.name, id: userInfo[0].id });
     return { userInfo:userInfo[0], token }
   }
   throw "用户不存在"

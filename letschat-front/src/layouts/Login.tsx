@@ -3,17 +3,26 @@ import FormInput from "@/components/FormInput"
 import { Lock, User } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useUserStore } from '@/stores/user'
+import { useNavigate } from "react-router";
+import contactWS from '@/server/contactWS'
+import WebSocketClient from '@/utils/WebSocketClient '
 import clsx from 'clsx'
 
 const btn = `text-center bg-[#0c0c1f] text-white rounded-md cursor-pointer  hover:bg-sky-700`
 
 const Login = () => {
-  const login = useUserStore();
+  let navigate = useNavigate();
   const [name, setname] = useState("");
   const [password, setPassword] = useState("");
+  const userStore = useUserStore()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login.login(name,password)
+    const loginStatus =await userStore.login(name, password)
+    if (loginStatus == 1 && userStore.user?.token) {
+      const wsClient = new WebSocketClient(userStore.user?.token);
+      userStore.setConnectdWs(wsClient); // Set the WebSocket client in the stor
+      navigate("/home/messages");
+    }
   };
 
   return (

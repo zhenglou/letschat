@@ -1,6 +1,6 @@
 import {  Document, Types } from 'mongoose';
 // 定义好友关系文档接口
-export interface FriendshipType extends Document {
+export interface FriendshipType {
   id?:string | null | Types.ObjectId;
   requester: Types.ObjectId;
   recipient: Types.ObjectId;

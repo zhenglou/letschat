@@ -5,7 +5,7 @@ import SearchBar from '@/components/SearchBar'
 import UserCard from './components/UserCard'
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon, UserRoundXIcon } from 'lucide-react'
 import { getUserList } from '@/apis/users'
-import { User3, UserSummary2 } from '@/types'
+import { UserSummary2 } from '@/types'
 import { useUserStore } from '@/stores/user'
 import toast from 'react-hot-toast'
 type Query = {

@@ -7,22 +7,36 @@ import { useGroupStore } from './group'
 import { useMessageStore } from './message'
 import { loginUser } from '@/apis/users'
 import toast from 'react-hot-toast'
+import WebSocketClient from '@/utils/WebSocketClient '
 
 // const BASE = import.meta.env.VITE_APP_URL
 // const BASE_WS = import.meta.env.VITE_APP_WS
-
+interface FriendRequest {
+    fromUserId: string;
+    toUserId: string;
+    message?: number;
+  }
+  interface WebSocketMessage {
+    type: 'friend_request' | 'auth';
+    data?: any;
+    token?: string;
+    status?: string;
+  }
 type UserStore = {
     user: User3 | null
     setUser: (user?: User3) => void
     login: (username: string, password: string) => any
-    logout: () => void
+    logout: () => void,
+    connectdWs:  WebSocketClient | null,
+    setConnectdWs: (ws: WebSocketClient | null) => void,
+    sendFriendRequest: (fs:FriendRequest) => void
     // connectWS: () => void
 }
 
 export const useUserStore = create<UserStore>((set, get) => ({
     user: userStorage.get(),
+    connectdWs: null,
     setUser: (user?: User3) => {
-
         if (user === undefined) {
             const userStored = userStorage.get()
             set(() => ({ user: userStored }))
@@ -31,18 +45,24 @@ export const useUserStore = create<UserStore>((set, get) => ({
             set(() => ({ user }))
         }
     },
-    login: async (name: string, password: string) => {
+    login: async (name, password) => {
         const res = await loginUser({ name, password })
         if (res.code == 200) {
             get().setUser(res.data)
             toast.success("登录成功")
-            location.href = '/home/messages'
+            // location.href = '/home/messages'
+            return 1;
             // get().connectWS()
         } else {
             toast.error(res.message)
+            return 0;
         }
-
-        return res
+    },
+    setConnectdWs: (ws: WebSocketClient | null) => {
+        set(() => ({ connectdWs: ws }))
+    },
+    sendFriendRequest: async (fs) => {
+        get().connectdWs?.send({ type: 'friend_request', data: fs })
     },
     // connectWS: () => {
     //     const user = get().user
