@@ -5,18 +5,17 @@ import { UserSummary } from '@/types'
 import { useEffect, useState } from 'react'
 import FriendList from './components/FriendList'
 import FriendPanel from './components/FriendPanel'
-import WebSocketClient from '@/utils/WebSocketClient '
 import { useUserStore } from '@/stores/user'
+import { useFriendStore } from '@/stores/friend'
 const Messages = () => {
     const user = useUserStore().user;
-    // const getList = useFriendStore(state => state.getList)
+    const getList = useFriendStore(state => state.getList)
 
     const [active, setActive] = useState<UserSummary | null>(null) 
 
 
     useEffect(() => {
-        // const wsClient = new WebSocketClient(user?.token!);
-        // getList()
+        getList()
     }, [])
     
     const onRemove = () => {

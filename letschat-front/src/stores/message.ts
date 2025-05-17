@@ -3,7 +3,8 @@ import { chatStorage } from '@/utils/storage'
 import { produce } from 'immer'
 import { create } from 'zustand'
 import { useFriendStore } from './friend'
-import { Group, useGroupStore } from './group'
+import { useGroupStore } from './group'
+import { Group } from "@/types"
 import { useUserStore } from './user'
 
 type MessageStore = {
@@ -11,13 +12,13 @@ type MessageStore = {
     chatList: Array<Chat>
     temp: Temp
     addChat: (user: Chat) => Chat
-    createChatFromMessage: (msg:Message) => Promise<number>
-    findChat: (id: string) => Chat | undefined
-    findChatIndex: (id: string) => number
-    deleteChat: (id: string) => void
+    createChatFromMessage: (msg: Message) => Promise<number>
+    findChat: (_id: string) => Chat | undefined
+    findChatIndex: (_id: string) => number
+    deleteChat: (_id: string) => void
     setActive: (contact: Chat) => void
     onMessage: (msg: Message) => Promise<void>
-    setHistory: (chatId: string, ...msgs:Message[]) => void
+    setHistory: (chatId: string, ...msgs: Message[]) => void
     clear: () => void
 }
 
@@ -34,21 +35,20 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
     addChat: (chat: Chat) => {
         const chatList = get().chatList
         let exist = chatList.find(e => e.id === chat.id)
+        // console.log(exist, 'exist');
 
         if (!exist) {
-            set(() => ({ chatList: [chat, ...get().chatList]}))  
+            set(() => ({ chatList: [chat, ...get().chatList] }))
 
             exist = chat
         }
-
         chatStorage.setList(get().chatList)
-
         return exist
     },
 
     createChatFromMessage: async (msg: Message) => {
-        const id = msg.chatId
-        const chatFactory = get().temp[id]
+        const _id = msg.chatId
+        const chatFactory = get().temp[_id]
         if (chatFactory) {
             chatFactory.push(msg)
             return -1
@@ -58,7 +58,7 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
         set((state) => ({
             temp: {
                 ...state.temp,
-                [id]: [msg]
+                [_id]: [msg]
             }
         }))
         console.log('create-chat-from-message', msg)
@@ -66,32 +66,31 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
         if (msg.chatType === ChatType.Single) {
             await useFriendStore.getState().getList()
             let owner: UserSummary | undefined
-            const user:any = useUserStore.getState().user
+            const user: any = useUserStore.getState().user
             const users = useFriendStore.getState().list.slice()
 
             if (user) {
-                const loginedUser:UserSummary = {
-                    id: user.id,
-                    username: user.username,
-                    email: user.email,
-                    avatar: user.avatar
+                const loginedUser: UserSummary = {
+                    _id: user._id,
+                    name: user.username,
+
                 }
                 users.push(loginedUser)
             }
 
             if (user === null) return -1
 
-            owner = users.find(e => e.id === user.id)
-            
+            owner = users.find(e => e._id === user._id)
+
             const ids = msg.chatId.split('-')
-            const toId = ids.find(e => String(e) !== String(owner?.id))
-            const toUser = users.find(e => String(e.id) === String(toId))
+            const toId = ids.find(e => String(e) !== String(owner?._id))
+            const toUser = users.find(e => String(e._id) === String(toId))
 
 
             if (!owner) return -1
             if (!toUser) return -1
 
-            const chat:SingleChat = {
+            const chat: SingleChat = {
                 type: ChatType.Single,
                 id: msg.chatId,
                 from: owner,
@@ -107,13 +106,13 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
 
         if (msg.chatType === ChatType.Group) {
             const groups = await useGroupStore.getState().getList()
-            const find = groups.find((g:Group) => String(g.id) === msg.chatId)
+            const find = groups.find((g: Group) => String(g._id) === msg.chatId)
 
             if (find === undefined) return -1
 
-            const chat:GroupChat = {
+            const chat: GroupChat = {
                 type: ChatType.Group,
-                id: String(find.id),
+                id: String(find._id),
                 group: find,
                 history: []
             }
@@ -122,13 +121,13 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
                 state.chatList.unshift(chat)
             }))
 
-            
+
         }
 
-        if (get().temp[id]) {
-            get().setHistory(id, ...get().temp[id])
+        if (get().temp[_id]) {
+            get().setHistory(_id, ...get().temp[_id])
             set(produce(state => {
-                delete state.temp[id]
+                delete state.temp[_id]
             }))
         }
 
@@ -137,8 +136,8 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
 
     onMessage: async (msg: Message) => {
         console.log('on-message:', msg)
-        let hasChat = get().findChatIndex(msg.chatId) 
-        
+        let hasChat = get().findChatIndex(msg.chatId)
+
         if (hasChat < 0) {
             get().createChatFromMessage(msg)
         } else {
@@ -147,43 +146,43 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
 
     },
 
-    setHistory: (chatId: string, ...msgs:Message[]) => {
-        const chatIndex = get().findChatIndex(chatId)
-        if (chatIndex < 0) return
+    setHistory: (chatId: string, ...msgs: Message[]) => {
+        // const chatIndex = get().findChatIndex(chatId)
+        // if (chatIndex < 0) return
 
-        set(produce((state:MessageStore) => {
-            const history = state.chatList[chatIndex].history
-            history.push(...msgs)
-            if (history.length > 100) history.shift()
-        }))
+        // set(produce((state: MessageStore) => {
+        //     const history = state.chatList[chatIndex].history
+        //     history.push(...msgs)
+        //     if (history.length > 100) history.shift()
+        // }))
 
-        chatStorage.setList(get().chatList)
+        // chatStorage.setList(get().chatList)
 
-        
-        const active = get().active
-        if (active && active.id === chatId) {
 
-            set(produce(state => {
-                const history = state.active.history
-                history.push(...msgs)
-                if (history.length > 100) history.shift()
-            }))
-        }
+        // const active = get().active
+        // if (active && active.id === chatId) {
+
+        //     set(produce(state => {
+        //         const history = state.active.history
+        //         history.push(...msgs)
+        //         if (history.length > 100) history.shift()
+        //     }))
+        // }
     },
 
     // setHistory()
 
-    findChat: (id: string) =>  {
-        return get().chatList.find(e => e.id === id)
+    findChat: (_id: string) => {
+        return get().chatList.find(e => e.id === _id)
     },
 
-    deleteChat: (id: string) => {
-        const index = get().findChatIndex(id)
+    deleteChat: (_id: string) => {
+        const index = get().findChatIndex(_id)
         if (index < 0) return
 
 
         set(produce(state => {
-            if (state.active === id) {
+            if (state.active === _id) {
                 state.active = null
             }
             state.chatList.splice(index, 1)
@@ -194,20 +193,22 @@ export const useMessageStore = create<MessageStore>((set, get) => ({
 
     },
 
-    findChatIndex: (id: string) => {
-        return get().chatList.findIndex(e => e.id === id)
+    findChatIndex: (_id: string) => {
+        return get().chatList.findIndex(e => e.id === _id)
     },
 
     setActive: (chat: Chat) => {
+        console.log("进入setActive",chat);
+
         set(() => ({ active: chat }))
 
         const chatList = get().chatList.slice()
+
         if (chatList.length) {
             const index = get().findChatIndex(chat.id)
-
             const find = chatList.splice(index, 1)
+            set(() => ({ chatList: chatList }))
             get().addChat(find[0])
-
         }
 
     },

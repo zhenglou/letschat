@@ -8,6 +8,8 @@ import Friends from "@/pages/Friends";
 import Messages from "@/pages/Messages";
 import SearchUser from "@/pages/search-user";
 import Groups from "@/pages/groups";
+import CreateGroup from "@/pages/CreateGroup";
+import DashBoard from "@/pages/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
           {
             path:'groups',
             Component:Groups
+          },
+          {
+            path:'create-group',
+            Component:CreateGroup
+          },
+          {
+            path:'dashBoard',
+            Component:DashBoard
           }
         ]
       },

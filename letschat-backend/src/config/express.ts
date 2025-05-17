@@ -3,6 +3,7 @@ import routes from '@/routes';
 import { connectDB } from "./mongodb"
 import { tokenVerifyMw } from '@/middleware/tokenVerifyMw';
 import createWebSocketServer from './websoket';
+import { redisConnect } from "./redis"
 import wssFun from '@/ws';
 import http from 'http';
 import cors from 'cors';
@@ -23,6 +24,7 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 const server = http.createServer(app);
 const wss = createWebSocketServer(server)
 wssFun(wss)
+redisConnect()
 // 启动服务器
 function appLanuch(port: number) {
   server.listen(port, () => {

@@ -3,7 +3,6 @@ import { list, general, listOne, deleteUser, modify, listByPage, userLoginServic
 import { ResponseHelper } from "@/utils/response"
 import { userType } from '@/types/user'
 import { Pagination } from '@/types/response';
-import { signToken, verifyToken } from '@/utils/Jwt';
 export const getAllUsers = async (req: Request, res: Response) => {
   const name = typeof req.query.name === 'string' ? req.query.name : '';
   const pageInfo: Pagination = { currentPage: Number(req.query.pageNo), pageSize: Number(req.query.pageSize) }

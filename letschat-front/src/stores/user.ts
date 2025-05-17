@@ -8,20 +8,10 @@ import { useMessageStore } from './message'
 import { loginUser } from '@/apis/users'
 import toast from 'react-hot-toast'
 import WebSocketClient from '@/utils/WebSocketClient '
-
+import { FriendRequest, FriendshipType} from '@/types'
 // const BASE = import.meta.env.VITE_APP_URL
 // const BASE_WS = import.meta.env.VITE_APP_WS
-interface FriendRequest {
-    fromUserId: string;
-    toUserId: string;
-    message?: number;
-  }
-  interface WebSocketMessage {
-    type: 'friend_request' | 'auth';
-    data?: any;
-    token?: string;
-    status?: string;
-  }
+
 type UserStore = {
     user: User3 | null
     setUser: (user?: User3) => void
@@ -29,7 +19,7 @@ type UserStore = {
     logout: () => void,
     connectdWs:  WebSocketClient | null,
     setConnectdWs: (ws: WebSocketClient | null) => void,
-    sendFriendRequest: (fs:FriendRequest) => void
+    sendFriendRequest: (fs:FriendshipType) => void
     // connectWS: () => void
 }
 

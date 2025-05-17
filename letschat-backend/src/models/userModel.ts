@@ -3,6 +3,7 @@ import { ResponseHelper } from '@/utils/response';
 import { userType } from '@/types/user'
 import { Pagination } from '@/types/response';
 import { Friendship } from './friendshipsModel';
+import {  Document, Types } from 'mongoose';
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -111,6 +112,14 @@ export async function deleteOne(user: userType) {
     }
   } catch (error: any) {
     return error;
+  }
+}
+export async function findById(id:Types.ObjectId){
+  try {
+    return User.findById(id);
+  } catch (error: any) {
+    console.log(error);
+    return null;
   }
 }
 

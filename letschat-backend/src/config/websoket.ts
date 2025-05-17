@@ -1,16 +1,6 @@
-import { WebSocketServer, WebSocket, Server } from 'ws';
-import { verifyToken } from '@/utils/Jwt';
+import { WebSocketServer } from 'ws';
 import http from 'http';
-import { WebSocketMessage } from '@/types/websoketTypes'
-import {
-  IncomingMessage,
-  ServerResponse
-} from "http"
-interface FriendRequest {
-  fromUserId: string;
-  toUserId: string;
-  message?: string;
-}
+
 
 function createWebSocketServer(server: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>): WebSocketServer {
   const wss = new WebSocketServer({ server });

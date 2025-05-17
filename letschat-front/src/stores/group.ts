@@ -2,22 +2,17 @@ import { UserSummary } from '@/types'
 import request, { Result } from '@/utils/request'
 import { produce } from 'immer'
 import { create } from 'zustand'
-
+import { Group, GroupSummary } from '@/types'
+import { createGroup, getGroupList } from '@/apis/groupsApi'
+import { useUserStore } from './user'
 // const BASE = import.meta.env.VITE_APP_URL
 
-export type Group = {
-    id: string,
-    name: string,
-    desc: string,
-    owner: UserSummary
-    members: Array<UserSummary>
-}
 
 type GroupStore = {
     active: Group | null
     list: Array<Group>
-    setActive: (group:Group) => void,
-    createGroup: (name: string, desc: string, memberIds: Array<number>) => Promise<any>
+    setActive: (group: Group) => void,
+    createGroup: (groupName: string, desc: string, memberIds: Array<number | string>) => Promise<any>
     deleteGroup: (groupId: string) => Promise<any>
     exitGroup: (groupId: string) => Promise<any>
     getList: () => Promise<Array<Group>>
@@ -27,40 +22,28 @@ type GroupStore = {
 export const useGroupStore = create<GroupStore>((set, get) => ({
     active: null,
     list: [],
-    
+
     setActive: (group: Group) => {
-        set(() => ({active: group}))
+        set(() => ({ active: group }))
     },
 
-    createGroup: async (name: string, desc: string, memberIds: Array<number>) => {
-        const res = await request({
-            url: '/group',
-            data: {
-                name,
-                desc,
-                memberIds
-            },
-            method: 'POST'
-        })
-
-        return res
+    createGroup: async (groupName: string, desc: string, memberIds: Array<number | string>) => {
+        const status = await createGroup({ groupName, desc, owner: useUserStore.getState().user?.userInfo._id, members: memberIds })
+        if (status.code == 200) {
+            return status
+        }
+        return false;
     },
 
     getList: async () => {
-        const res = await request({
-            url: '/group/list',
-            method: "GET"
-        })
+        const res = await getGroupList({ members: useUserStore.getState().user?.userInfo._id })
 
-        if (res) {
+        if (res.code == 200) {
             console.log('get-group:', res)
-            const list = res.data.map((e:any) => ({
-                ...e.group,
-                members: e.members
-            }))
-            set(() => ({ list }))
+
+            set(() => ({ list:res.data }))
         }
-        
+
         return get().list
     },
 
@@ -73,8 +56,8 @@ export const useGroupStore = create<GroupStore>((set, get) => ({
         })
 
         if (res) {
-            set(produce((state: GroupStore) =>{
-                const index = state.list.findIndex((e:Group) => e.id === groupId)
+            set(produce((state: GroupStore) => {
+                const index = state.list.findIndex((e: Group) => e._id === groupId)
 
                 state.list.splice(index, 1)
             }))
@@ -94,8 +77,8 @@ export const useGroupStore = create<GroupStore>((set, get) => ({
         })
 
         if (res) {
-            set(produce((state:GroupStore) =>{
-                const index = state.list.findIndex((e:Group) => e.id === groupId )
+            set(produce((state: GroupStore) => {
+                const index = state.list.findIndex((e: Group) => e._id === groupId)
                 // state.active = null
                 state.list.splice(index, 1)
             }))

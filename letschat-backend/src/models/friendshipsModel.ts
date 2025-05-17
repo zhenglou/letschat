@@ -30,16 +30,15 @@ export const Friendship = mongoose.model('friendships', friendshipSchema);
 // 创建好友关系
 export async function create(fs: FriendshipType) {
   try {
-    await Friendship.create(fs);
-    return 1;
+    return await Friendship.create(fs);
   } catch (error: any) {
-    throw error;
+    return 0;
   }
 }
 // 查询所有好友关系
-export async function find() {
+export async function find(query?: any) {
   try {
-    return Friendship.find();
+    return query ? Friendship.find(query) : Friendship.find();
   } catch (error: any) {
     return error;
   }
@@ -55,9 +54,9 @@ export async function findByPage(pageInfo: Pagination) {
 // 查找单个好友关系
 export async function findOne(key: number, fs: FriendshipType) {
   try {
-    if (key === 0 && fs.id) {
+    if (key === 0 && fs._id) {
       // 通过id查询
-      return Friendship.findById(fs.id);
+      return Friendship.findById(fs._id);
     } else if (key === 1 && fs.requester && fs.recipient) {
       // 通过 requester 和 recipient 查询
       return Friendship.findOne({ requester: fs.requester, recipient: fs.recipient });
@@ -71,7 +70,7 @@ export async function findOne(key: number, fs: FriendshipType) {
 export async function update(fs: FriendshipType) {
   try {
     const updated = await Friendship.findByIdAndUpdate(
-      fs.id,
+      fs._id,
       {
         requester: fs.requester,
         recipient: fs.recipient,
@@ -91,7 +90,7 @@ export async function update(fs: FriendshipType) {
 // 删除好友关系
 export async function deleteOne(fs: FriendshipType) {
   try {
-    const result = await Friendship.deleteOne({ _id: fs.id });
+    const result = await Friendship.deleteOne({ _id: fs._id });
     if (result.deletedCount > 0) {
       return 1;
     } else {
@@ -102,3 +101,10 @@ export async function deleteOne(fs: FriendshipType) {
   }
 }
 
+export async function findByReqAndRec(requester: Types.ObjectId,recipient:Types.ObjectId) {
+  try {
+    return Friendship.findOne({ requester,recipient });
+  } catch (error: any) {
+    throw error;  
+  }
+}

@@ -16,11 +16,9 @@ const GroupCard = ({ data, onClick }:Props) => {
         className="flex gap-3 items-center border mb-3 p-2 rounded-lg border-gray-100 cursor-pointer hover:bg-gray-50"
         onClick={() => onClick(data) }
     >
-        {/* <GroupAvatar */}
-        {/* <GroupAvatar members={data.group.members} /> */}
-        {/* <Avatar name={single.to.username} avatar={single.to.avatar}/> */}
+        <GroupAvatar members={data.group.members} />
         <div>
-            {/* <div className="font-bold text-base">{data.group.name}</div> */}
+            <div className="font-bold text-base">{data.group.groupName}</div>
             {   
                 historyLength > 0 &&
                 <div className="text-sm text-gray-500">{data.history[historyLength - 1].content.slice(0, 10)}</div>

@@ -1,31 +1,31 @@
-// import { useUserStore } from "@/stores/user"
-import { ContentType, Message } from "@/types"
+import { useUserStore } from "@/stores/user"
+import { ContentType, GroupSendMessage, Message } from "@/types"
 // import { Emoji } from "emoji-picker-react"
 import { useEffect, useRef } from "react"
 import Avatar from "./Avatar"
+import { Emoji } from "emoji-picker-react"
 
-const Content = (msg: Message) => {
+const Content = (msg: Message |GroupSendMessage) => {
     return <>
         {
             msg.contentType === ContentType.Text && msg.content
         }
         {
-            // msg.contentType === ContentType.Emoji && <Emoji unified={msg.content} />
+            msg.contentType === ContentType.Emoji && <Emoji unified={msg.content} />
         }
     </>
 }
 
 
 type Props = {
-    messages: Array<Message>
+    messages: Array<Message | GroupSendMessage>
 }
 const MessageBox = ({ messages} : Props) => {
-    // const user = useUserStore(state => state.user)
+    const user = useUserStore(state => state.user)
 
     const boxRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-        // console.log('messages-change', messages)
         scrollToBottom()
     }, [messages])
 
@@ -39,25 +39,25 @@ const MessageBox = ({ messages} : Props) => {
         <div className="p-5 flex-grow overflow-y-auto w-full h-full flex flex-col">
             <div ref={boxRef}>
             {
-                // messages.map(e => (
-                //     <div key={e.date} className="flex">
-                //         {
-                //             e.from.id === user?.id ?
-                //             <div key={e.date} className="flex items-center justify-end w-full">
-                //                 <div key={e.date} className="border p-2 m-2 rounded-md bg-black text-white">
-                //                     { Content(e) }
-                //                 </div>
-                //                 <Avatar name={user.username} avatar={user.avatar} className="size-7 text-sm"/>
-                //             </div>:
-                //             <div key={e.date} className=" flex items-center w-full">
-                //                 <Avatar name={e.from.username} avatar={e.from.avatar} className="size-7 text-sm"/>
-                //                 <div key={e.date} className="border p-2 m-2 rounded-md">
-                //                     { Content(e) }
-                //                 </div>
-                //             </div>
-                //         }
-                //     </div>
-                // ))
+                messages.map((e, index) => (
+                    <div key={`message-${e.date}-${index}`} className="flex">
+                        {
+                            e.from._id === user?.userInfo._id ?
+                            <div className="flex items-center justify-end w-full">
+                                <div className="border p-2 m-2 rounded-md bg-black text-white">
+                                    { Content(e) }
+                                </div>
+                                <Avatar name={user?.userInfo.name} className="size-7 text-sm"/>
+                            </div>:
+                            <div className="flex items-center w-full">
+                                <Avatar name={e.from.name} className="size-7 text-sm"/>
+                                <div className="border p-2 m-2 rounded-md">
+                                    { Content(e) }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                ))
             }
             </div>
         </div>

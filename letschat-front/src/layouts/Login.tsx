@@ -4,8 +4,8 @@ import { Lock, User } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useUserStore } from '@/stores/user'
 import { useNavigate } from "react-router";
-import contactWS from '@/server/contactWS'
 import WebSocketClient from '@/utils/WebSocketClient '
+import { useWsStore } from '@/stores/ws'
 import clsx from 'clsx'
 
 const btn = `text-center bg-[#0c0c1f] text-white rounded-md cursor-pointer  hover:bg-sky-700`
@@ -21,6 +21,7 @@ const Login = () => {
     if (loginStatus == 1 && userStore.user?.token) {
       const wsClient = new WebSocketClient(userStore.user?.token);
       userStore.setConnectdWs(wsClient); // Set the WebSocket client in the stor
+      useWsStore.setState({ws: wsClient})
       navigate("/home/messages");
     }
   };

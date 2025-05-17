@@ -21,7 +21,7 @@ export class ResponseHelper {
    * @param message 错误信息
    * @param details 错误详情（可选）
    */
-  static error(code: number, message: string, details?: any): ErrorResponse {
+  static error(code: number, message: any, details?: any): ErrorResponse {
     return {
       code,
       message,

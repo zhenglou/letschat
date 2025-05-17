@@ -14,6 +14,7 @@
   "dependencies": {
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
+    "emoji-picker-react": "^4.12.2",
     "framer-motion": "^12.9.2",
     "lucide-react": "^0.503.0",
     "react": "19.1",
@@ -36,6 +37,7 @@
     "@types/testing-library__jest-dom": "^6.0.0",
     "@types/webpack-env": "^1.18.8",
     "@types/websocket": "^1.0.10",
+    "antd": "^5.25.0",
     "autoprefixer": "^10.4.21",
     "axios": "^1.9.0",
     "babel-loader": "^10.0.0",

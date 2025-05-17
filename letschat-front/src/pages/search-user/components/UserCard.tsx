@@ -6,13 +6,9 @@ import { motion } from 'framer-motion'
 import { LogIn, UserPlus } from 'lucide-react'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
-
+import { FriendshipType } from '@/types'
 const BaseUrl = ""
-interface FriendRequest {
-    fromUserId: string;
-    toUserId: string;
-    message?: number;
-}
+
 type Props = {
     user: UserSummary2
 }
@@ -22,10 +18,9 @@ const UserCard = ({ user }: Props) => {
     const [top, setTop] = useState<string | number>('100%')
     const userStore = useUserStore()
     const toAddFriend = async (user: UserSummary2) => {
-        const friendRequest: FriendRequest = {
-            fromUserId: userStore.user?.userInfo._id!, // Assuming you have a way to get the current user's ID
-            toUserId: user._id, // The ID of the user you want to send a friend request to
-            message: 0, // Optional message for the friend request
+        const friendRequest: FriendshipType = {
+            requester: userStore.user?.userInfo._id!, // Assuming you have a way to get the current user's ID
+            recipient: user._id, // The ID of the user you want to send a friend request to
         };
 
         userStore.sendFriendRequest(friendRequest)

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { list, general, listOne, deleteFriendship, modify, listByPage } from '@/services/friendshipsService';
+import { list, general, listOne, deleteFriendship, modify, listByPage, findListByUserId} from '@/services/friendshipsService';
 import { ResponseHelper } from '@/utils/response';
 import { FriendshipType } from '@/types/friendShips';
 import { Pagination } from '@/types/response';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 // 获取所有好友关系，支持分页
 export const getAllFriendships = async (req: Request, res: Response) => {
@@ -46,9 +46,21 @@ export const getFriendshipByIdOrUsers = async (req: Request, res: Response) => {
 // 创建好友关系
 export const createFriendship = async (req: Request, res: Response) => {
   try {
-    res.status(200).json(ResponseHelper.success(await general(req.body)));
+    const { requester, recipient } = req.body;
+    let newReq:Types.ObjectId;
+    let newRec:Types.ObjectId;
+    if(requester > recipient){
+      // console.log("requester > recipient");
+      newReq = requester;
+      newRec = recipient;
+    }else{
+      // console.log("recipient > requester");
+      newReq = recipient;
+      newRec = requester;
+    }
+    res.status(200).json(ResponseHelper.success(await general({requester:newReq,recipient:newRec})));
   } catch (error: any) {
-    res.status(400).json(ResponseHelper.error(400, error));
+    res.status(400).json(ResponseHelper.error(400, "请勿重复添加好友"));
   }
 };
 
@@ -71,15 +83,9 @@ export const deleteFriendshipOne = async (req: Request, res: Response) => {
 // 修改好友关系
 export const updateFriendship = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
-    const { requester, recipient, status } = req.body;
-    const fs: any = {
-      id,
-      requester: new mongoose.Types.ObjectId(requester),
-      recipient: new mongoose.Types.ObjectId(recipient),
-      status
-    };
-    const result = await modify(fs);
+    // const { requester, recipient, status, _id } = req.body;
+    const result = await modify(req.body);
+    
     if (result === 1) {
       res.status(200).json(ResponseHelper.success('好友关系更新成功'));
     } else {
@@ -88,4 +94,20 @@ export const updateFriendship = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(400).json(ResponseHelper.error(400, error.message));
   }
+};
+
+// 获取好友关系列表(通过id)
+export const getFriendshipListById = async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  if (!userId) {
+    res.status(400).json(ResponseHelper.error(400, '请提供userId参数'));
+    return;
+  }
+  const findFriendshipsList = await findListByUserId(userId);
+  // console.log(findFriendshipsList);
+  
+  res.status(200).json(ResponseHelper.success(findFriendshipsList));
+
+  // const result = await listOne(0, { userId });
+  // res.status(200).json(ResponseHelper.success(result));
 };

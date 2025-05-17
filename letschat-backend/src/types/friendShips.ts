@@ -1,7 +1,7 @@
 import {  Document, Types } from 'mongoose';
 // 定义好友关系文档接口
 export interface FriendshipType {
-  id?:string | null | Types.ObjectId;
+  _id?:string | null | Types.ObjectId;
   requester: Types.ObjectId;
   recipient: Types.ObjectId;
   status?: 'pending' | 'accepted' | 'blocked';

@@ -1,12 +1,23 @@
 import request, { Result } from "@/utils/request";
-type FSType = {
-  requester:string,
-  recipient:string
-}
-export function createFriendship(data:FSType):Promise<Result>{
+import { FriendshipType } from "@/types";
+export function createFriendship(data: FriendshipType): Promise<Result> {
   return request<Result>({
-    url:"/friendships",
-    method:'POST',
+    url: "/friendships",
+    method: 'POST',
     data
+  })
+}
+export function updateFriendship(data: FriendshipType): Promise<Result> {
+  return request<Result>({
+    url: "/friendships",
+    method: 'PUT',
+    data
+  })
+}
+
+export function getFriendships(userId: string): Promise<Result> {
+  return request<Result>({
+    url: `/friendships/${userId}`,
+    method: 'GET'
   })
 }
