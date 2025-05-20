@@ -6,7 +6,8 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    clean: true
+    clean: true,
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -22,7 +23,7 @@ module.exports = {
                 '@babel/preset-env',
                 '@babel/preset-typescript',
                 ['@babel/preset-react', { runtime: 'automatic' }]
-               
+
               ]
             }
           }
@@ -66,6 +67,7 @@ module.exports = {
   },
   devServer: {
     static: './dist',
+    historyApiFallback: true,
     hot: true,
     open: true
   }

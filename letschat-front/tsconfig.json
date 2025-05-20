@@ -3,10 +3,10 @@
     "target": "es6",
     "module": "esnext",
     "lib": ["dom", "esnext"],
-    "types": ["react", "react-dom", "jest", "@testing-library/jest-dom"],
+    "types": [ "jest", "@testing-library/jest-dom","@types/react-router","@types/react-router-dom","websocket"],
     "jsx": "react-jsx",
     "strict": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -16,6 +16,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*","App.tsx","main.tsx","declaration.d.ts"],
+  "include": ["src/**/*","App.tsx","main.tsx","declaration.d.ts","test/**/*"],
   "exclude": ["node_modules", "dist", "test"]
 }

@@ -1,10 +1,7 @@
-const mongoose = require('mongoose');
-async function connectDB() {
+import mongoose from 'mongoose';
+export async function connectDB() {
   try {
-      await mongoose.connect('mongodb://localhost:27017/letschat', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+      await mongoose.connect('mongodb://localhost:27017/letschat');
     console.log('✅ Connected to letschat');
   } catch (err) {
     console.error('❌ Connection error:', err);
@@ -12,10 +9,11 @@ async function connectDB() {
 }
 
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true }
-});
-const User = mongoose.model('chat_history', userSchema);
+// const userSchema = new mongoose.Schema({
+//   name: { type: String, required: true }
+// });
+// const User = mongoose.model('chat_history', userSchema);
+
 // // 3. 插入数据示例
 // async function createUser() {
 //   const user = new User({ name: 'Alice',age:18 });
