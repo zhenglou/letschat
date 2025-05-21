@@ -4,7 +4,7 @@ import { connectDB } from "./mongodb"
 import { tokenVerifyMw } from '@/middleware/tokenVerifyMw';
 import createWebSocketServer from './websoket';
 import { redisConnect } from "./redis"
-import wssFun from '@/ws';
+import wssFun from '@/wss';
 import http from 'http';
 import cors from 'cors';
 const app: Application = express();

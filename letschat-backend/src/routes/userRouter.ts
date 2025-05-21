@@ -9,7 +9,7 @@ router.get('/', getAllUsers);
 router.get('/getUserByNameOrId', getUserByNameOrId);
 
 // 创建用户
-router.post('/', createUser);
+router.post('/create', createUser);
 router.post('/login', userLogin);
 
 // 修改用户信息
