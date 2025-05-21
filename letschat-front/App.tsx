@@ -7,9 +7,13 @@ interface Props {
   message: string;
 }
 function App() {
+  console.log(process.env.SERVER_URL,"SERVER_URL");
+  
   useEffect(() => {
     // 初始化 WebSocket 单例
-    new WebSocketClient(userStorage.get().token);
+    if(userStorage.get()){
+      new WebSocketClient(userStorage.get().token);
+    }
   }, []);
   return (
     < div className="w-screen h-screen flex justify-center items-center text-black dark:bg-black">
