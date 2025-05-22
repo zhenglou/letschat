@@ -39,9 +39,10 @@ export const useUserStore = create<UserStore>((set, get) => ({
         const res = await loginUser({ name, password })
         if (res.code == 200) {
             get().setUser(res.data)
+            
             toast.success("登录成功")
             // location.href = '/home/messages'
-            return 1;
+            return {token:res.data.token,loginStatus:1};
             // get().connectWS()
         } else {
             toast.error(res.message)
@@ -71,7 +72,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
         userStorage.delete()
 
 
-        location.href = '/login'
+        location.href = '/'
 
         useMessageStore.getState().clear()
         useGroupStore.getState().clear()

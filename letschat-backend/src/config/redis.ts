@@ -1,7 +1,9 @@
 import { createClient } from 'redis';
 // 连接 Redis
 const redisClient = createClient({
-  url: 'redis://localhost:6379',
+  // url: 'redis://localhost:6379',
+  url: `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || 6379}`,
+  password: process.env.REDIS_PASSWORD || '', 
   socket: {
     reconnectStrategy: (retries) => {
       if (retries > 10) {
@@ -9,7 +11,7 @@ const redisClient = createClient({
         return new Error('Redis 重连失败');
       }
       return Math.min(retries * 100, 3000);
-    }
+    },
   }
 });
 const redisPublisher = redisClient.duplicate();

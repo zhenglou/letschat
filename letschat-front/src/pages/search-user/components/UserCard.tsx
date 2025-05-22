@@ -51,7 +51,7 @@ const UserCard = ({ user }: Props) => {
                 initial={{ top: '100%' }}
                 animate={{ top }}
             >
-                <div className='flex flex-col items-center' onClick={() => toLogin(user)}>
+                <div className='flex flex-col items-center' onClick={() => useUserStore.getState().logout()}>
                     <LogIn /> <span className='text-gray-500'>Login</span>
                 </div>
                 <div className='flex flex-col items-center' onClick={() => toAddFriend(user)}>

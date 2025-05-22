@@ -20,8 +20,7 @@ const NavBar = () => {
             <ModeToggle/>
 
             {/* info */}
-            <Link to='/' className="border-t p-5 flex gap-2 items-center cursor-pointer relative">
-        
+            <Link to='#' className="border-t p-5 flex gap-2 items-center cursor-pointer relative">
                 <Avatar name={userStore.user?.userInfo.name} className='flex-shrink-0'/>
                 <div className='relative overflow-hidden'>
                     <div className="text-base font-bold text-ellipsis overflow-hidden">{ userStore.user?.userInfo.name }</div>

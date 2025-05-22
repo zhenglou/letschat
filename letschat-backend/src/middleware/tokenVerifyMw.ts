@@ -6,7 +6,7 @@ export const tokenVerifyMw = (
   res: Response,
   next: NextFunction
 ) => {
-  const whitelist = ['/users/login'];
+  const whitelist = ['/users/login',"/users/create"];
   
   if (whitelist.includes(req.path)) {
     return next(); // 跳过白名单路由

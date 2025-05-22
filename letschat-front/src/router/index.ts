@@ -10,6 +10,7 @@ import SearchUser from "@/pages/search-user";
 import Groups from "@/pages/groups";
 import CreateGroup from "@/pages/CreateGroup";
 import DashBoard from "@/pages/Dashboard";
+import SettingPage from "@/pages/SettingPage";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
           {
             path:'dashBoard',
             Component:DashBoard
+          },
+          {
+            path:'setting',
+            Component:SettingPage
           }
         ]
       },

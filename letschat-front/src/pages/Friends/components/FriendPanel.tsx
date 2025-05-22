@@ -86,7 +86,7 @@ const FriendPanel = ({ user, onRemove }: Props) => {
 							<div className={btnClass} onClick={() => sendMessage(user)}>
 								<MessageCircleMore /> Send Message
 							</div>
-							<div className={btnClass} onClick={() => toast.success('功能开发中')}>
+							<div className={btnClass} onClick={() => useUserStore.getState().logout()}>
 								{/* <div className={btnClass}> */}
 								<LogIn /> Login
 							</div>

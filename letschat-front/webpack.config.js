@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const webpack = require('webpack');
 module.exports = {
   entry: './main.tsx',
   output: {
@@ -56,7 +57,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html'
     }),
-    new ForkTsCheckerWebpackPlugin()
+    new ForkTsCheckerWebpackPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.SERVER_URL': JSON.stringify(process.env.SERVER_URL)
+    })
   ],
   resolve: {
     alias: {

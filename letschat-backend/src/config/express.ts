@@ -4,7 +4,7 @@ import { connectDB } from "./mongodb"
 import { tokenVerifyMw } from '@/middleware/tokenVerifyMw';
 import createWebSocketServer from './websoket';
 import { redisConnect } from "./redis"
-import wssFun from '@/ws';
+import wssFun from '@/wss';
 import http from 'http';
 import cors from 'cors';
 const app: Application = express();
@@ -27,7 +27,7 @@ wssFun(wss)
 redisConnect()
 // 启动服务器
 function appLanuch(port: number) {
-  server.listen(port, () => {
+  server.listen(port,'0.0.0.0', () => {
     console.log(`Server running on http://localhost:${port}`);
   });
 }

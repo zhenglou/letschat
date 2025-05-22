@@ -11,6 +11,8 @@ const MAX = 100
 
 export const userStorage = {
     set: (user: User3) => {
+        console.log("setuser");
+        
         STORAGE.setItem('user', JSON.stringify(user))
     },
     delete: () => {

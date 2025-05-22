@@ -1,8 +1,10 @@
-import { WebSocketServer } from 'ws';
+// import { WebSocketServer } from 'ws';
+const WebSocketServer = require('ws').Server
+// const { WebSocketServer } = require('ws');
+// console.log(WebSocketServer);
+
 import http from 'http';
-
-
-function createWebSocketServer(server: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>): WebSocketServer {
+function createWebSocketServer(server: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>) {
   const wss = new WebSocketServer({ server });
   // wss.on('connection', (ws: WebSocket) => {
   //   ws.on('message', (message: string) => {

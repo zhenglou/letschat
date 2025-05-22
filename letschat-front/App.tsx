@@ -3,13 +3,21 @@ import { useEffect } from 'react';
 import { Outlet } from "react-router";
 import WebSocketClient from "@/utils/WebSocketClient "
 import { userStorage } from "@/utils/storage"
+import { useUserStore } from '@/stores/user'
+import { useWsStore } from '@/stores/ws'
 interface Props {
   message: string;
 }
 function App() {
+  console.log(process.env.SERVER_URL,"SERVER_URL");
+  
   useEffect(() => {
     // 初始化 WebSocket 单例
-    new WebSocketClient(userStorage.get().token);
+    if(userStorage.get()){
+      const wsClient = new WebSocketClient(userStorage.get().token);
+      useUserStore.getState().setConnectdWs(wsClient); 
+      useWsStore.setState({ws: wsClient})
+    }
   }, []);
   return (
     < div className="w-screen h-screen flex justify-center items-center text-black dark:bg-black">
