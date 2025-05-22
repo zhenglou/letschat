@@ -72,7 +72,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
         userStorage.delete()
 
 
-        location.href = '/login'
+        location.href = '/'
 
         useMessageStore.getState().clear()
         useGroupStore.getState().clear()

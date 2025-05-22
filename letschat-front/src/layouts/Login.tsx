@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import WebSocketClient from '@/utils/WebSocketClient '
 import { useWsStore } from '@/stores/ws'
 import clsx from 'clsx'
+import toast from 'react-hot-toast'
 
 const btn = `text-center bg-[#0c0c1f] text-white rounded-md cursor-pointer  hover:bg-sky-700`
 
@@ -18,7 +19,6 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const {loginStatus,token} =await userStore.login(name, password)
-    console.log(111);
     if (loginStatus == 1 && token) {
       
       const wsClient = new WebSocketClient(token);
@@ -45,8 +45,8 @@ const Login = () => {
         </FormInput>
         <input type='submit' className={clsx('w-96', 'py-2', btn)} />
         <div className='flex justify-between w-full text-gray-500 mt-3'>
-          <div className='hover:text-black cursor-pointer' >Forgot password ?</div>
-          <Link className='hover:text-black cursor-pointer' to='/home'>Sign up</Link>
+          <div className='hover:text-black cursor-pointer' onClick={() => toast("怎能忘记~")}>Forgot password ?</div>
+          <Link className='hover:text-black cursor-pointer' to='/'>Sign up</Link>
         </div>
       </form>
 
