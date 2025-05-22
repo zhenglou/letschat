@@ -15,7 +15,7 @@ export interface Pagination {
 }
 
 const instance = axios.create({
-  baseURL: process.env.SERVER_URL || "http://localhost:3000",
+  baseURL: process.env.SERVER_URL || "http://8.134.77.26:3000",
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json'

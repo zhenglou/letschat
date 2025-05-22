@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-const WS_URL = process.env.SERVER_URL || "ws://localhost:3000'"
+const WS_URL = process.env.SERVER_URL || "ws://8.134.77.26:3000"
 console.log(WS_URL);
 
 import { WebSocketMessage } from '@/types/websoketTypes'

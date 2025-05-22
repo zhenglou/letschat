@@ -27,7 +27,7 @@ wssFun(wss)
 redisConnect()
 // 启动服务器
 function appLanuch(port: number) {
-  server.listen(port, () => {
+  server.listen(port,'0.0.0.0', () => {
     console.log(`Server running on http://localhost:${port}`);
   });
 }

@@ -17,9 +17,11 @@ const Login = () => {
   const userStore = useUserStore()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const loginStatus =await userStore.login(name, password)
-    if (loginStatus == 1 && userStore.user?.token) {
-      const wsClient = new WebSocketClient(userStore.user?.token);
+    const {loginStatus,token} =await userStore.login(name, password)
+    console.log(111);
+    if (loginStatus == 1 && token) {
+      
+      const wsClient = new WebSocketClient(token);
       userStore.setConnectdWs(wsClient); // Set the WebSocket client in the stor
       useWsStore.setState({ws: wsClient})
       navigate("/home/messages");
