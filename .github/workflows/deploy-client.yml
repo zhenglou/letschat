@@ -34,6 +34,6 @@ jobs:
           script: |
             # 调试：列出构建产物是否存在
             # ls -la ./letschat-front/dist/
-            ls
+            ls -la ./letschat-front/
             # 同步文件
             rsync -avz ./letschat-front/dist/ root@${{ secrets.SERVER_IP }}:/home/
