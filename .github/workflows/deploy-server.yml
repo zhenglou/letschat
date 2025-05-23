@@ -42,8 +42,7 @@ jobs:
           rsync -avz --delete \
             --exclude="node_modules" \
             ./letschat-backend/dist \
-            ./letschat-backend/package.json \
-            ./letschat-backend/package-lock.json \
+            ./letschat-backend/package*.json \
             root@$SERVER_IP:/home/letschat-backend/
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
