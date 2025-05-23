@@ -1,1 +1,36 @@
+name: Deploy Client
 
+on:
+  push:
+    branches: [main]
+    # 仅当 client/ 目录有变更时触发
+    paths:
+      - 'letschat-front/**'
+
+jobs:
+  build-and-deploy-client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install and Build Client
+        working-directory: ./letschat-front  # 指定客户端目录
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy to Cloud
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # 将构建产物同步到服务器
+            rsync -avz ./client/dist/ root@8.134.77.26:/home/
