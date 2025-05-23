@@ -29,8 +29,8 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y rsync
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
           # 将远程服务器的主机密钥添加到已知主机（避免首次连接确认）
           ssh-keyscan $SERVER_IP >> ~/.ssh/known_hosts
         env:
