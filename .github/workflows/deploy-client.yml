@@ -32,5 +32,7 @@ jobs:
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # 将构建产物同步到服务器
-            rsync -avz ./client/dist/ root@8.134.77.26:/home/
+            # 调试：列出构建产物是否存在
+            ls -la ./letschat-front/dist/
+            # 同步文件
+            rsync -avz ./letschat-front/dist/ root@${{ secrets.SERVER_IP }}:/home/
