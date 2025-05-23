@@ -21,24 +21,20 @@
     - mock
   
 - 运维
-
   - CI / CD
     - github Action
     - docker
     - 阿里云服务
 
 - 服务端
-
   - node v20.13.1 npm v9.5.0
   - express
   - redis
   - websoket
   - API 设计范式
-
     - restful api
 
   - 数据库 
-
     - mongodb
     - mongoose
     - Compass 
