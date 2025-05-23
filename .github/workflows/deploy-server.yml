@@ -43,7 +43,7 @@ jobs:
             --exclude="node_modules" \
             ./letschat-backend/dist root@$SERVER_IP:/home/letschat-backend/ \
             ./letschat-backend/package.json root@$SERVER_IP:/home/letschat-backend/ \
-            ./letschat-backend/package-lock.json root@$SERVER_IP:/home/letschat-backend/ \
+            ./letschat-backend/package-lock.json root@$SERVER_IP:/home/letschat-backend/
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
       - name: Deploy to docker cloud
