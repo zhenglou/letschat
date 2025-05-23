@@ -6,7 +6,7 @@ on:
     branches: [main]
     # 仅当 client/ 目录有变更时触发
     paths:
-      - 'letschat-end/**'
+      - 'letschat-backend/**'
 
 jobs:
   build-and-deploy-client:
@@ -21,7 +21,7 @@ jobs:
           node-version: 20
 
       - name: Install and Build Client
-        working-directory: ./letschat-end  # 指定客户端目录
+        working-directory: ./letschat-backend  # 指定客户端目录
         run: |
           npm install
           npm run build
@@ -41,9 +41,9 @@ jobs:
         run: |
           rsync -avz --delete \
             --exclude="node_modules" \
-            ./letschat-end/dist root@$SERVER_IP:/home/letschat-end/ \
-            ./letschat-end/package.json root@$SERVER_IP:/home/letschat-end/
-            ./letschat-end/package-lock.json root@$SERVER_IP:/home/letschat-end/
+            ./letschat-backend/dist root@$SERVER_IP:/home/letschat-backend/ \
+            ./letschat-backend/package.json root@$SERVER_IP:/home/letschat-backend/
+            ./letschat-backend/package-lock.json root@$SERVER_IP:/home/letschat-backend/
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
       - name: Deploy to docker cloud
@@ -54,7 +54,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # 进入项目
-            cd /home/letschat-end
+            cd /home/letschat-backend
             # 删除镜像 构建新镜像
             docker rmi letschatend1
             docker build -t letschatend1 .
