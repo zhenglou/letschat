@@ -36,22 +36,27 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SERVER_IP: ${{ secrets.SERVER_IP }}
-      - name: Deploy to Cloud
+      - name: transfer to Cloud
         run: |
-          rsync -avz \
+          rsync -avz --delete \
             --exclude="node_modules" \
-            ./letschat-front/dist/ \
-            root@$SERVER_IP:/home/
+            ./letschat-front/dist \
+            root@$SERVER_IP:/home/letschat-front/
         env:
           SERVER_IP: ${{ secrets.SERVER_IP }}
-      # - name: Deploy to Cloud
-      #   uses: appleboy/ssh-action@v1
-      #   with:
-      #     host: ${{ secrets.SERVER_IP }}
-      #     username: root
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     script: |
-      #       # 调试：列出构建产物是否存在
-      #       # ls -la ./letschat-front/dist/
-      #       # 同步文件
-      #       rsync -avz ./letschat-front/dist/ root@${{ secrets.SERVER_IP }}:/home/
+      - name: Deploy to docker cloud
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # 进入项目
+            cd /home/letschat-front
+            # 停止容器 删除容器 删除镜像 构建镜像 启动容器
+            docker stop letschatfront1
+            docker rm letschatfront1
+            docker rmi letschatfront1
+            docker build -t letschatfront1 .
+            docker run -d -p 80:80 --name letschatfront1 letschatfront1
+            
