@@ -33,6 +33,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # 调试：列出构建产物是否存在
-            ls -la ./letschat-front/dist/
+            # ls -la ./letschat-front/dist/
+            ls
             # 同步文件
             rsync -avz ./letschat-front/dist/ root@${{ secrets.SERVER_IP }}:/home/
