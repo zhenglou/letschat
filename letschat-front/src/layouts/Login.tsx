@@ -22,7 +22,7 @@ const Login = () => {
     if (loginStatus == 1 && token) {
 
       const wsClient = new WebSocketClient(token);
-      userStore.setConnectdWs(wsClient); // Set the WebSocket client in the stor
+      userStore.setConnectdWs(wsClient); 
       useWsStore.setState({ ws: wsClient })
       navigate("/home/messages");
     }
