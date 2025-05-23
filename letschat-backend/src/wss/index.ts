@@ -37,7 +37,7 @@ function wssFun(wss: WebSocketServer) {
         if ('groupId' in parsedMessage) {
           dealGroupMessage(activeConnections, parsedMessage as GroupMessage)
         } else {
-          console.error('收到的 group 消息缺少 groupId 字段', parsedMessage)
+          console.error('收到的 group 消息缺少 groupId 字段，无法处理。', parsedMessage)
         }
       }
       if (parsedMessage.type === 'group-chat') {
