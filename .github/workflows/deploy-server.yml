@@ -53,12 +53,16 @@ jobs:
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            # 停止 docker-compose 
+            docker-compose down
             # 进入项目
             cd /home/letschat-backend
             # 删除镜像 构建新镜像
             docker rmi letschatend1
             docker build -t letschatend1 .
-            # 停止 docker-compose 启动 docker-compose
-            docker-compose down
+            # 进入 compose 存放目录
+            cd /var/db/docker-mongodb-redis
+            # 启动 docker-compose
             docker-compose up -d
+
             
