@@ -32,7 +32,7 @@ const Login = () => {
     <>
       <div className='absolute top-5 left-5'>
         <span>测试用账号1：</span><span>testone 123456</span><br />
-        <span>测试用账号2：</span><span>testwo 123456</span>
+        <span>测试用账号2：</span><span>testwo 1234567</span>
       </div>
       <div className="flex flex-col justify-center items-center w-full">
         <div className="text-3xl font-bold mb-5">
