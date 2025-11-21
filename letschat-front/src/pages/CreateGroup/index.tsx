@@ -15,6 +15,7 @@ type FormData = {
 }
 
 const CreateGroup = () => {
+    const a = 2
     const navigate = useNavigate()
     const createGroup = useGroupStore(state => state.createGroup)
 
