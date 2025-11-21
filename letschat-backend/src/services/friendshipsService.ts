@@ -11,6 +11,7 @@ export const list = () => {
 }
 
 export const listOne = (key: number, fs: FriendshipType) => {
+  const a = 1;
   return findOne(key, fs);
 }
 
